@@ -1,0 +1,27 @@
+{
+  "name": "moj-zagreb",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "data:refresh": "python3 scripts/prepare_data.py --refresh && python3 scripts/compare_access.py && python3 scripts/prepare_extras.py",
+    "test": "node --import tsx --test src/*.test.ts",
+    "build:calyx": "tsc && vite build --base=/zgviz/ --outDir=dist-calyx",
+    "data:extras": "python3 scripts/prepare_extras.py"
+  },
+  "dependencies": {
+    "@turf/turf": "^7.2.0",
+    "lucide": "^0.468.0",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/three": "^0.170.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0"
+  }
+}

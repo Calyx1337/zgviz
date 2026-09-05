@@ -1,0 +1,10 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {accepts,closureFeature,safeSourceUrl} from './extra-data';
+import {WalkingGraph} from './routing';
+test('closure coordinates convert latitude longitude pairs, rejecting malformed geometry',()=>{assert.deepEqual(closureFeature({polyline:'45.8 15.9 45.81 15.91'},0)?.geometry.coordinates,[[15.9,45.8],[15.91,45.81]]);for(const polyline of ['','45 16 45','x 16 45 16','15.9 45.8 15.91 45.81'])assert.equal(closureFeature({polyline},0),null);});
+test('waste acceptance requires explicit confirmation',()=>{assert.ok(accepts('DA'));for(const value of ['NE','',null,undefined,'nepoznato'])assert.equal(accepts(value),false);});
+test('external documentation excludes executable URLs',()=>{assert.equal(safeSourceUrl('javascript:alert(1)'),null);assert.equal(safeSourceUrl('https://data.zagreb.hr/'),'https://data.zagreb.hr/');});
+test('extra services have distinct ids and public-service coordinates',()=>{const rows=JSON.parse(readFileSync('public/data/extra-services.json','utf8'));assert.equal(new Set(rows.map((r:any)=>r.id)).size,rows.length);assert.equal(rows.length,299);assert.ok(rows.every((r:any)=>r.coordinates[0]>15&&r.coordinates[0]<17&&r.coordinates[1]>45&&r.coordinates[1]<47));});
+test('a nearby toilet is reachable through the existing pedestrian graph',()=>{const graph=new WalkingGraph(JSON.parse(readFileSync('public/data/walking-graph.json','utf8')));const result=graph.search([15.97355,45.80682],1200);const rows=JSON.parse(readFileSync('public/data/extra-services.json','utf8'));assert.ok(rows.filter((s:any)=>s.kind==='toilets').some((s:any)=>{const n=graph.nearest(s.coordinates);return n.id>=0&&result.distances[n.id]+n.distance<=1200;}));});
