@@ -97,6 +97,7 @@ Prototip je objavljen 5. rujna 2026. na https://calyx.hr/zgviz/ i provjeren u pr
 - CloudFront distribucija: `E13L8Q0E36E5O8`. Glavna stranica i zajednička konfiguracija nisu mijenjane.
 - `npm run build:calyx` priprema `dist-calyx/` s baznom putanjom `/zgviz/`.
 - Objavljene datoteke imaju gzip kompresiju i zaglavlje `Content-Encoding: gzip`, uz odgovarajući izvorni MIME tip. Predmemorija: 60 sekundi za HTML, 3600 sekundi za ostale datoteke.
+- Bucket nema politiku pristupa: svaki preneseni objekt mora imati ACL `public-read` (`aws s3 cp --acl public-read` ili `put-object-acl`), inače CloudFront vraća 403.
 - Pri ponovnoj objavi prvo prenijeti podatke i resurse, a `index.html` posljednji. Invalidirati samo `/zgviz` i `/zgviz/*`. Ne sinkronizirati korijen bucketa niti koristiti brisanje izvan prefiksa aplikacije.
 
 
