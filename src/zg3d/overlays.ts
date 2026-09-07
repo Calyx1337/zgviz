@@ -6,17 +6,18 @@ type HeightFn = (x: number, y: number) => number;
 interface RoadsFile { ceste: Record<string, number[][]>; zeljeznica: number[][]; tramvaj: number[][] }
 interface GreenFile { poligoni: { ime: string | null; vrsta: string; povrsina_m2: number; centroid: [number, number]; v: number[]; t: number[] }[] }
 
-/** Road classes drawn as draped ribbons (width in metres) — everything else as 1 px lines. */
+/** Road classes drawn as draped ribbons (width in metres). Widths are visual, a little above real-world, so streets stay readable when tilted. */
 const RIBBON: Record<string, { w: number; color: number }> = {
   autocesta: { w: 16, color: 0x6b7690 },
   autocesta_prikljucak: { w: 8, color: 0x6b7690 },
   brza: { w: 13, color: 0x66728c },
   brza_prikljucak: { w: 7, color: 0x66728c },
-  glavna: { w: 11, color: 0x5e6a82 },
-  sekundarna: { w: 9, color: 0x556178 },
-  tercijarna: { w: 7, color: 0x4d586e },
+  glavna: { w: 13, color: 0x5e6a82 },
+  sekundarna: { w: 11, color: 0x556178 },
+  tercijarna: { w: 9, color: 0x4d586e },
+  ulica: { w: 6, color: 0x4c5870 },
+  pjesacka: { w: 3, color: 0x4c5870 },
 };
-const LINE: Record<string, number> = { ulica: 0x3a4658, pjesacka: 0x3a4658 };
 
 const GREEN: Record<string, { color: string; opacity: number }> = {
   park: { color: '#9fb393', opacity: 0.9 },
@@ -68,15 +69,8 @@ export async function loadRoads(baseUrl: string, heightAt: HeightFn): Promise<Gr
   if (!res.ok) return null;
   const file = (await res.json()) as RoadsFile;
   const group = new Group(); group.name = 'ceste';
-  // minor streets first (thin), then ribbons by class ascending so major roads paint over minor ones
-  const lv: number[] = [];
-  for (const [k, polys] of Object.entries(file.ceste)) if (LINE[k] !== undefined) lines(polys, heightAt, 0.9, lv);
-  if (lv.length) {
-    const g = new BufferGeometry(); g.setAttribute('position', new Float32BufferAttribute(lv, 3));
-    const l = new LineSegments(g, new LineBasicMaterial({ color: 0x4c5870, transparent: true, opacity: 0.95, depthTest: true, depthWrite: false }));
-    l.renderOrder = 3; l.frustumCulled = false; group.add(l);
-  }
-  for (const k of ['tercijarna', 'sekundarna', 'glavna', 'brza_prikljucak', 'brza', 'autocesta_prikljucak', 'autocesta']) {
+  // ribbons by class ascending so major roads paint over minor ones
+  for (const k of ['pjesacka', 'ulica', 'tercijarna', 'sekundarna', 'glavna', 'brza_prikljucak', 'brza', 'autocesta_prikljucak', 'autocesta']) {
     const polys = file.ceste[k]; if (!polys?.length) continue;
     const pos: number[] = [], idx: number[] = [];
     for (const xy of polys) ribbon(xy, RIBBON[k].w, heightAt, 1.0, pos, idx);

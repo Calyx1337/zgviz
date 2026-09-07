@@ -1,4 +1,4 @@
-# Moj Zagreb
+# Zagreb^Dohvat
 
 Interaktivni web prototip: **„Klikni gdje živiš. Vidi što ti je dostupno i što se u tvom kvartu mijenja.”**
 
@@ -23,10 +23,8 @@ Sadržaj `dist/` može posluživati obični web poslužitelj. HTTPS je potreban 
 - Klik na zgradu koristi točku na stvarnom službenom tlocrtu, ističe zgradu i ponovno računa okolinu. Klik na tlo postavlja proizvoljno polazište.
 - Dostupnost 5, 10 i 15 minuta računa se po pješačkoj mreži, brzinom 80 m/min. Kategorije otvaraju potpune popise i put do odabranog sadržaja.
 - Lokalna pretraga ulica, četvrti i evidentiranih sadržaja. Nije potpuni adresni geokoder: kućni broj koji nije u evidenciji treba odabrati na karti.
-- Pogledi „Svi sadržaji”, „Obitelj”, „Bez auta” i „Biciklist” mijenjaju prioritetne kategorije; svi računaju hodanje.
 - Geolocirane komunalne aktivnosti, filtri faza, izvorna faza i status, objavljeni iznos, datum promjene, izvor. Kapitalni plan 2024. zasebna je isključiva arhiva.
 - Aktivnosti koje navode cijelu gradsku četvrt prikazuju se u posebnom popisu, bez lažne precizne oznake na karti.
-- Usporedba 17 četvrti: ilustrativni indeks dostupnosti na uzorku, broj sadržaja, radovi u tijeku i komunalne vrijednosti. Približavanje gradske karte ponovno otvara lokalni prikaz.
 - 2D/3D, nagib i rotacija, slojevi, biciklističke staze, geolokacija uz dopuštenje preglednika, tipkovnički dostupna pretraga i dijalozi, mobilni bočni panel.
 - Polazište i vrijeme ostaju u URL-u radi ponovnog otvaranja. Geolokaciju ne tražimo automatski.
 
@@ -63,9 +61,7 @@ Polazište i sadržaj spajaju se na najbliži čvor unutar 100 m; duljina spojev
 
 ### Eksperimentalni indeks
 
-Za jednu lokaciju indeks je `100 × broj dostupnih kategorija / broj kategorija u pogledu`. Kategorije imaju jednaku težinu. Prekidači prikaza slojeva ne mijenjaju metodologiju osobnog pogleda.
-
-Usporedba četvrti koristi prosjek tog indeksa na **20 deterministički uzorkovanih položaja iz ZG3D skupa** po četvrti (zapisi visine barem 2 m, reservoir sampling, seed 2022). Nije reprezentativna ocjena svih stanovnika, nema populacijskog ponderiranja i zapisi modela nisu jedinstvene kućne adrese. Nepovezani uzorci izuzeti su: Brezovica 18/20, Sesvete 19/20, ostale 20/20. Rezultati postoje za sva tri vremena i sva četiri osobna pogleda.
+Za jednu lokaciju indeks je `100 × broj dostupnih kategorija / 10`. Kategorije imaju jednaku težinu. Prekidači prikaza slojeva ne mijenjaju metodologiju indeksa.
 
 ### Kartografska podloga
 
@@ -91,7 +87,7 @@ npm run build
 
 Testovi štite ponašanje na nepovezanoj mreži, granicu dosega, nedostupno polazište i razlikovanje završene faze ugovaranja od završenih radova. Build provjerava TypeScript i priprema statičke datoteke. Vizualna provjera i interakcije obavljaju se u stvarnom pregledniku; build sam po sebi nije dokaz ispravnog prikaza.
 
-Za službenu javnu uslugu preostaju validacija pristupnih putova i ulaza, precizne mrežne izokrone, puniji obuhvat mreže, veći/populacijski ponderiran uzorak četvrti i dogovoreno automatsko osvježavanje izvora.
+Za službenu javnu uslugu preostaju validacija pristupnih putova i ulaza, precizne mrežne izokrone, puniji obuhvat mreže i dogovoreno automatsko osvježavanje izvora.
 
 ## Javna objava
 
@@ -110,7 +106,7 @@ Prototip je objavljen 5. rujna 2026. na https://calyx.hr/zgviz/ i provjeren u pr
 
 Zgrade koriste tri razine detalja, uključujući LoD 2.2 krovove pri približavanju. Reljef je aproksimacija iz Z_Min zgrada na mreži 200 m, a ne službeni DEM; osobito u šumama i neizgrađenim područjima može odstupati od stvarnosti. Visine nisu umjetno uvećane. Rute i oznake koriste isti lokalni koordinatni sustav i visinu terena; vrijeme hoda i dalje ne uključuje nagib.
 
-Prečac Medvednica otvara panoramu bez promjene odabranog polazišta. Za osvježavanje 3D podataka pokrenuti pipeline u izvornom projektu i kopirati njegov `data/out/` u `public/zg3d/`, zatim izgraditi i provjeriti aplikaciju. Izvorni kod i podaci nisu mijenjani u projektu zgvizveli.
+Za osvježavanje 3D podataka pokrenuti pipeline u izvornom projektu i kopirati njegov `data/out/` u `public/zg3d/`, zatim izgraditi i provjeriti aplikaciju. Izvorni kod i podaci nisu mijenjani u projektu zgvizveli.
 
 ## Svakodnevno i planovi
 
